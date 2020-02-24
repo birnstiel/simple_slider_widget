@@ -36,7 +36,7 @@ class Widget():
 
         self._ax_A = self.fig.add_axes([slider_x0, slider_y0, slider_w, slider_h], facecolor="lightgoldenrodyellow")
         self._slider_A = w.Slider(self._ax_A, "A", -2, 2, valinit=0, valfmt='%.1f')
-        self._ax_A.set_title("A = {:.1f}".format(self._slider_A.val), fontsize='small')
+        self._ax_A.set_title("A", fontsize='small')
         self._slider_A.on_changed(self.update)
 
         self.model_line, = self.ax.plot(data[:, 0], np.ones_like(data[:, 0]))
