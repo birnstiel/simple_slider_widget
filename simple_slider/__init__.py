@@ -2,19 +2,31 @@ import matplotlib.pyplot as plt
 import matplotlib.widgets as w
 import numpy as np
 import pkg_resources
-
-# Get the data
-
-data_fname = pkg_resources.resource_filename(__name__, 'data.dat')
-data = np.loadtxt(data_fname)
+import argparse
+# import os
 
 
 class Widget():
 
-    def __init__(self):
+    def __init__(self, fname=None):
         """
-        Initialize the widget: draw model and data
+        Initialize the widget to compare model and data
+
+        fname : str
+            file name to the data file
         """
+
+        # Get the data
+
+        if fname is None:
+            fname = pkg_resources.resource_filename(__name__, 'data.dat')
+
+        data = np.loadtxt(fname)
+        self.data = data
+
+        # self.r     = np.loadtxt(os.path.join(fname, 'radius.dat'))
+        # self.sigma = np.loadtxt(os.path.join(fname, 'sigma_averaged.dat'))
+        # self.t     = np.loadtxt(os.path.join(fname, 'time.dat'))
 
         # Make the figure
 
@@ -52,7 +64,7 @@ class Widget():
 
         # calculate our toy model
 
-        model = data[:, 0]**(-self._slider_A.val)
+        model = self.data[:, 0]**(-self._slider_A.val)
 
         # update the model line
 
@@ -66,7 +78,13 @@ class Widget():
 
 
 def main():
-    _ = Widget()
+
+    RTHF   = argparse.RawTextHelpFormatter
+    PARSER = argparse.ArgumentParser(description='Widget to test planetary gap profiles', formatter_class=RTHF)
+    PARSER.add_argument('-d', '--data-path', help='path to the data files', type=str, default=None)
+    ARGS  = PARSER.parse_args()
+
+    _ = Widget(fname=ARGS.data_path)
     plt.show()
 
 
